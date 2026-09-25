@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  // Pages are designed at 1920px wide; on wider screens (e.g. 2560x1440) scale everything
+  // proportionally so the layout looks the same on every monitor.
+  (function () {
+    var BASE = 1920;
+    function fit() {
+      var z = Math.max(1, window.innerWidth / BASE);
+      document.documentElement.style.zoom = z > 1 ? String(z) : '';
+      document.documentElement.style.setProperty('--page-zoom', String(z));
+    }
+    fit();
+    window.addEventListener('resize', fit);
+  })();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>LSPD Kartvizit Oluşturucu</title>
@@ -35,7 +49,7 @@
 *,*::before,*::after{box-sizing:border-box;}
 html{color-scheme:dark;}
 body{
-  margin:0; min-height:100vh;
+  margin:0; min-height:calc(100vh / var(--page-zoom, 1));
   font-family:'Segoe UI','Open Sans',system-ui,-apple-system,sans-serif;
   background:var(--background); color:var(--foreground);
   -webkit-font-smoothing:antialiased;
@@ -425,8 +439,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.addEventListener('mousemove', (e) => {
             if (isDragging) {
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
+                const dx = (e.clientX - startX) / pageZoom();
+                const dy = (e.clientY - startY) / pageZoom();
                 element.style.left = `${initialX + dx}px`;
                 element.style.top = `${initialY + dy}px`;
             }
@@ -574,14 +588,20 @@ document.addEventListener('DOMContentLoaded', function () {
         field.addEventListener('input', updateFontPreview);
     });
 
+    function pageZoom() { return parseFloat(document.documentElement.style.zoom) || 1; }
+
     downloadBtn.addEventListener('click', function () {
         const cardContainer = document.getElementById('card-container');
         const wasSelected = selectedEl;
         selectText(null);   // seçim çerçevesi indirilen görselde çıkmasın
+        // Ekran ölçeklemesi görsele yansımasın: çekim sırasında kapatılır.
+        const zoom = document.documentElement.style.zoom;
+        document.documentElement.style.zoom = '';
         html2canvas(cardContainer, {
             useCORS: true,
             backgroundColor: null
         }).then(canvas => {
+            document.documentElement.style.zoom = zoom;
             const imageData = canvas.toDataURL('image/png');
             const downloadLink = document.createElement('a');
             downloadLink.href = imageData;
