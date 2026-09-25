@@ -47,7 +47,7 @@
   color-scheme: dark;
 }
 *,*::before,*::after{box-sizing:border-box;}
-html{color-scheme:dark;scrollbar-gutter:stable;}
+html{color-scheme:dark;}
 body{
   margin:0; min-height:calc(100vh / var(--page-zoom, 1));
   font-family:'Segoe UI','Open Sans',system-ui,-apple-system,sans-serif;
@@ -58,7 +58,7 @@ body{
 
 /* Header bar: same as the arrest calculator */
 .app-header{position:sticky;top:0;z-index:40;background:var(--header);color:#fff;border-bottom:4px solid var(--primary);box-shadow:0 4px 12px rgba(0,0,0,.35);padding-top:env(safe-area-inset-top,0px);}
-.app-header-inner{max-width:1400px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 32px;}
+.app-header-inner{height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 32px;}
 .app-header a.header-gear{width:40px;height:40px;justify-content:center;border-radius:var(--radius);color:rgba(255,255,255,.8);}
 .app-header a.header-gear:hover{background:rgba(255,255,255,.1);color:#fff;}
 .app-header a{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
